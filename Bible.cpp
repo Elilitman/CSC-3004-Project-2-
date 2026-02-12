@@ -160,15 +160,15 @@ Verse Bible::nextVerse(LookupResult& status) {
 // REQUIRED: Return an error message string to describe status
 string Bible::error(Ref ref, LookupResult status) {
    if (status == NO_BOOK) {
-      return "<p>No such book " + to_string(ref.getBook()) + "</p>";
+      return "No such book " + to_string(ref.getBook());
    } else if (status == NO_CHAPTER) {
-      return "<p>No such chapter " + to_string(ref.getChapter())
-              + " in " + ref.getBookName() + "</p>";
+      return "No such chapter " + to_string(ref.getChapter())
+              + " in " + ref.getBookName();
    } else if (status == NO_VERSE) {
-      return "<p>No such verse " + to_string(ref.getVerse()) + " in "
-              + ref.getBookName() + " " + to_string(ref.getChapter()) + "</p>";
+      return "No such verse " + to_string(ref.getVerse()) + " in "
+              + ref.getBookName() + " " + to_string(ref.getChapter());
    } else {
-      return "<p>Error: An unexpected error has occurred</p>";
+      return "Error: An unexpected error has occurred";
    }
 }
 

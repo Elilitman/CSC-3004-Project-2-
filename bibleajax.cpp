@@ -148,7 +148,7 @@ int main()
             if (requestedVerse.getRef().getBook() == 66 &&
                 requestedVerse.getRef().getChapter() == 22 &&
                 requestedVerse.getRef().getVerse() == 21) {
-              cout << "Revelation 22:21 is the last verse in the Bible." << endl;
+              cout << "<p>Revelation 22:21 is the last verse in the Bible.</p>" << endl;
               break;
             }
 
@@ -175,7 +175,7 @@ int main()
 
          cout << "</p>" << endl;
       } else {
-         cout << selectedBible.error(ref, result) << endl;
+         cout << "<p>" << selectedBible.error(ref, result) << "</p>" << endl;
       }
    }
 
