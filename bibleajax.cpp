@@ -139,9 +139,6 @@ int main()
     */
    if (validInput) {
       if (result == SUCCESS) {
-         cout << "Search Type: <b>" << **st << "</b>" << endl;
-         cout << "<p>Your result: ";
-
          requestedVerse.display();
          cout << endl;
 
