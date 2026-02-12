@@ -116,21 +116,6 @@ int main()
     *        TO LOOK UP THE REQUESTED VERSES
     */
 
-   // Used for verse retrieval issues
-   LookupResult result;
-
-   // Given reference
-   Ref ref(bookNum, chapterNum, verseNum);
-
-   // Create & open the correct Bible
-   string BibleFileLocation = "/home/class/csc3004/Bibles/" + BibleTranslation + "-complete";
-   Bible selectedBible(BibleFileLocation);
-   selectedBible.openBible();
-
-   // Declare & initialize the verse
-   Verse requestedVerse;
-   requestedVerse = selectedBible.lookup(ref, result);
-
    /* SEND BACK THE RESULTS
     * Finally we send the result back to the client on the standard output stream
     * in HTML text format.
@@ -138,6 +123,22 @@ int main()
     * so we must include HTML formatting commands to make things look presentable!
     */
    if (validInput) {
+
+      // Used for verse retrieval issues
+      LookupResult result;
+
+      // Given reference
+      Ref ref(bookNum, chapterNum, verseNum);
+
+      // Create & open the correct Bible
+      string BibleFileLocation = "/home/class/csc3004/Bibles/" + BibleTranslation + "-complete";
+      Bible selectedBible(BibleFileLocation);
+      selectedBible.openBible();
+
+      // Declare & initialize the verse
+      Verse requestedVerse;
+      requestedVerse = selectedBible.lookup(ref, result);
+
       if (result == SUCCESS) {
          requestedVerse.display();
          cout << endl;
@@ -177,9 +178,9 @@ int main()
       } else {
          cout << "<p>" << selectedBible.error(ref, result) << "</p>" << endl;
       }
-   }
 
-   selectedBible.closeBible();
+      selectedBible.closeBible();
+   }
 
    return 0;
 }
