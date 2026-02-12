@@ -77,17 +77,10 @@ int main()
       return 0;
    }
 
-   // Create the path location for the given Bible translation
-   string BibleFileLocation = "/home/class/csc3004/Bibles/" + BibleTranslation + "-complete";
-
-   // These are needed for finding the verse
-   LookupResult result;
-   Bible selectedBible(BibleFileLocation);
-   Ref ref(bookNum, chapterNum, verseNum);
-   Verse requestedVerse;
-
-   // Convert and check input data
+   // Check input data
    bool validInput = true;
+
+   // Book number check
    if (book != cgi.getElements().end()) {
       if (bookNum > 66 || bookNum < 1) {
          cout << "<p>There is no book number (" << bookNum << ") in the Bible.</p>" << endl;
@@ -95,6 +88,7 @@ int main()
       }
    }
 
+   // Chapter number check
    if (chapter != cgi.getElements().end()) {
       if (chapterNum > 150) {
          cout << "<p>The chapter number (" << chapterNum << ") is too high.</p>" << endl;
@@ -105,6 +99,7 @@ int main()
       }
    }
 
+   // Verse number check
    if (verse != cgi.getElements().end()) {
       if (verseNum > 176) {
          cout << "<p>The verse number (" << verseNum << ") is too high.</p>" << endl;
@@ -121,7 +116,19 @@ int main()
     *        TO LOOK UP THE REQUESTED VERSES
     */
 
+   // Used for verse retrieval issues
+   LookupResult result;
+
+   // Given reference
+   Ref ref(bookNum, chapterNum, verseNum);
+
+   // Create & open the correct Bible
+   string BibleFileLocation = "/home/class/csc3004/Bibles/" + BibleTranslation + "-complete";
+   Bible selectedBible(BibleFileLocation);
    selectedBible.openBible();
+
+   // Declare & initialize the verse
+   Verse requestedVerse;
    requestedVerse = selectedBible.lookup(ref, result);
 
    /* SEND BACK THE RESULTS
@@ -171,7 +178,7 @@ int main()
 
          cout << "</p>" << endl;
       } else {
-         cout << "<p>" << selectedBible.error(ref, result) << "</p>" << endl;
+         cout << selectedBible.error(ref, result) << endl;
       }
    }
 
