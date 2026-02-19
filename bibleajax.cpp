@@ -80,12 +80,20 @@ int main()
       return 0;
    }
 
-   // Check input data
+   // TODO: OTHER INPUT VALUE CHECKS ARE NEEDED ... but that's up to you!
+   // For checking input data
    bool validRefInput = true;
+
+   /* Constants for checking the input data
+    * A constant is used to avoid magic numbers
+    */
+   const int LARGEST_BOOK_NUM = 66;
+   const int LARGEST_CHAPTER_NUM = 150;
+   const int LARGEST_VERSE_NUM = 176;
 
    // Book number check
    if (book != cgi.getElements().end()) {
-      if (bookNum > 66 || bookNum < 1) {
+      if (bookNum > LARGEST_BOOK_NUM || bookNum <= 0) {
          cout << "<p>There is no book number " << bookNum << " in the Bible.</p>" << endl;
          validRefInput = false;
       }
@@ -93,7 +101,7 @@ int main()
 
    // Chapter number check
    if (chapter != cgi.getElements().end()) {
-      if (chapterNum > 150) {
+      if (chapterNum > LARGEST_CHAPTER_NUM) {
          cout << "<p>The chapter number (" << chapterNum << ") is too high.</p>" << endl;
          validRefInput = false;
       } else if (chapterNum <= 0) {
@@ -104,7 +112,7 @@ int main()
 
    // Verse number check
    if (verse != cgi.getElements().end()) {
-      if (verseNum > 176) {
+      if (verseNum > LARGEST_VERSE_NUM) {
          cout << "<p>The verse number (" << verseNum << ") is too high.</p>" << endl;
          validRefInput = false;
       } else if (verseNum <= 0) {
@@ -113,17 +121,8 @@ int main()
       }
    }
 
-   // TODO: OTHER INPUT VALUE CHECKS ARE NEEDED ... but that's up to you!
-
    /* TODO: PUT CODE HERE TO CALL YOUR BIBLE CLASS FUNCTIONS
     *        TO LOOK UP THE REQUESTED VERSES
-    */
-
-   /* SEND BACK THE RESULTS
-    * Finally we send the result back to the client on the standard output stream
-    * in HTML text format.
-    * This string will be inserted as is inside a container on the web page,
-    * so we must include HTML formatting commands to make things look presentable!
     */
    if (validRefInput) {
 
@@ -142,6 +141,12 @@ int main()
       Verse requestedVerse;
       requestedVerse = selectedBible.lookup(ref, verseRetrievalResult);
 
+      /* SEND BACK THE RESULTS
+       * Finally we send the result back to the client on the standard output stream
+       * in HTML text format.
+       * This string will be inserted as is inside a container on the web page,
+       * so we must include HTML formatting commands to make things look presentable!
+       */
       if (verseRetrievalResult == SUCCESS) {
          requestedVerse.display();
          cout << endl;
@@ -149,9 +154,10 @@ int main()
          for (int i = 0; i < numVerses - 1; i++) {
 
             // Do not allow any attempts to retrieve a verse beyond Rev 22:21
-            if (requestedVerse.getRef().getBook() == 66 &&
-                requestedVerse.getRef().getChapter() == 22 &&
-                requestedVerse.getRef().getVerse() == 21) {
+            bool endOfBibleReached = requestedVerse.getRef().getBook() == 66 &&
+                                     requestedVerse.getRef().getChapter() == 22 &&
+                                     requestedVerse.getRef().getVerse() == 21;
+            if (endOfBibleReached) {
               cout << "<p>Revelation 22:21 is the last verse in the Bible.</p>" << endl;
               break;
             }
@@ -183,6 +189,7 @@ int main()
          cout << "<p>" << selectedBible.error(ref, verseRetrievalResult) << "</p>" << endl;
       }
 
+      // Close the Bible
       selectedBible.closeBible();
    }
 
