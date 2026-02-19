@@ -75,7 +75,7 @@ int main()
                              aBibleTranslation == "ylt" ||
                              aBibleTranslation == "webster";
    if (!isValidTranslation) {
-      cout << "<p>Error: (" << aBibleTranslation << ") is not a valid translation. " <<
+      cout << "<p>Error: \"" << aBibleTranslation << "\" is not a valid translation. " <<
               "Please select a valid translation from the dropdown menu.</p>" << endl;
       return 0;
    }
@@ -86,7 +86,7 @@ int main()
    // Book number check
    if (book != cgi.getElements().end()) {
       if (bookNum > 66 || bookNum < 1) {
-         cout << "<p>There is no book number (" << bookNum << ") in the Bible.</p>" << endl;
+         cout << "<p>There is no book number " << bookNum << " in the Bible.</p>" << endl;
          validRefInput = false;
       }
    }
