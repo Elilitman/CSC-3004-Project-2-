@@ -44,7 +44,7 @@ class Verse {
 
       // Display verse number and verse text on cout
       // The verse's number is called and displayed by calling verseRef.displayNoBC()
-      void displayNoBC();
+      void displayNoBookOrChapter();
 };
 
 #endif //Verse_H

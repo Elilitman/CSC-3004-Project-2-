@@ -44,7 +44,7 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
    string verseLine;
 
    // Booleans used for checking
-   bool found = false;
+   bool requestedVerseFound = false;
    bool fileOpened = true;
    bool noVerseOrBook = false;
 
@@ -75,10 +75,10 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
        (status != NO_VERSE) || (fileOpened == false)) {
       lineNum = 1;
 
-      while(found == false && noVerseOrBook == false &&
+      while(requestedVerseFound == false && noVerseOrBook == false &&
             getline(instream, verseLine)) {
          Ref lineRef = Ref(verseLine);
-         Verse nextV;
+         Verse succeedingVerse;
 
          // Make sure that the end of the Bible has not
          // been reached before trying to get the next verse
@@ -90,7 +90,7 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
             streampos currPos = instream.tellg();
 
             // Get the next verse for error checking
-            nextV = nextVerse(status);
+            succeedingVerse = nextVerse(status);
 
             // Return to the saved position
             instream.seekg(currPos);
@@ -98,7 +98,7 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
 
          // Check to see if the current verse is the requested one
          if (ref == lineRef) {
-            found = true;
+            requestedVerseFound = true;
          }
 
          /* Determine if an invalid chapter or verse was given
@@ -110,11 +110,11 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
 
          if (ref.getBook() == lineRef.getBook()) {
             if ((ref.getChapter() == lineRef.getChapter()) &&
-                (nextV.getRef().getBook() > ref.getBook() ||
-                 nextV.getRef().getChapter() > ref.getChapter())) {
+                (succeedingVerse.getRef().getBook() > ref.getBook() ||
+                 succeedingVerse.getRef().getChapter() > ref.getChapter())) {
                status = NO_VERSE;
                noVerseOrBook = true;
-            } else if (nextV.getRef().getBook() > ref.getBook()) {
+            } else if (succeedingVerse.getRef().getBook() > ref.getBook()) {
                status = NO_CHAPTER;
                noVerseOrBook = true;
             }
@@ -125,7 +125,7 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
    }
 
    // update the status variable
-   if (found) {
+   if (requestedVerseFound) {
       // Verse was found
       status = SUCCESS;
       aVerse = Verse(verseLine);

@@ -66,25 +66,28 @@ int main()
    int numVerses = nv->getIntegerValue();
 
    // Convert the translation to a string
-   string BibleTranslation = translation->getValue();
+   string aBibleTranslation = translation->getValue();
 
    // Determine if a valid translation was given
-   if (BibleTranslation != "web" && BibleTranslation != "kjv" &&
-       BibleTranslation != "dby" && BibleTranslation != "ylt" &&
-       BibleTranslation != "webster") {
-      cout << "<p>Error: (" << BibleTranslation << ") is not a valid translation. " <<
+   bool isValidTranslation = aBibleTranslation == "web" ||
+                             aBibleTranslation == "kjv" ||
+                             aBibleTranslation == "dby" ||
+                             aBibleTranslation == "ylt" ||
+                             aBibleTranslation == "webster";
+   if (!isValidTranslation) {
+      cout << "<p>Error: (" << aBibleTranslation << ") is not a valid translation. " <<
               "Please select a valid translation from the dropdown menu.</p>" << endl;
       return 0;
    }
 
    // Check input data
-   bool validInput = true;
+   bool validRefInput = true;
 
    // Book number check
    if (book != cgi.getElements().end()) {
       if (bookNum > 66 || bookNum < 1) {
          cout << "<p>There is no book number (" << bookNum << ") in the Bible.</p>" << endl;
-         validInput = false;
+         validRefInput = false;
       }
    }
 
@@ -92,10 +95,10 @@ int main()
    if (chapter != cgi.getElements().end()) {
       if (chapterNum > 150) {
          cout << "<p>The chapter number (" << chapterNum << ") is too high.</p>" << endl;
-         validInput = false;
+         validRefInput = false;
       } else if (chapterNum <= 0) {
          cout << "<p>The chapter must be a positive number.</p>" << endl;
-         validInput = false;
+         validRefInput = false;
       }
    }
 
@@ -103,10 +106,10 @@ int main()
    if (verse != cgi.getElements().end()) {
       if (verseNum > 176) {
          cout << "<p>The verse number (" << verseNum << ") is too high.</p>" << endl;
-         validInput = false;
+         validRefInput = false;
       } else if (verseNum <= 0) {
          cout << "<p>The verse must be a positive number.</p>" << endl;
-         validInput = false;
+         validRefInput = false;
       }
    }
 
@@ -122,24 +125,24 @@ int main()
     * This string will be inserted as is inside a container on the web page,
     * so we must include HTML formatting commands to make things look presentable!
     */
-   if (validInput) {
+   if (validRefInput) {
 
       // Used for verse retrieval issues
-      LookupResult result;
+      LookupResult verseRetrievalResult;
 
       // Given reference
       Ref ref(bookNum, chapterNum, verseNum);
 
       // Create & open the correct Bible
-      string BibleFileLocation = "/home/class/csc3004/Bibles/" + BibleTranslation + "-complete";
+      string BibleFileLocation = "/home/class/csc3004/Bibles/" + aBibleTranslation + "-complete";
       Bible selectedBible(BibleFileLocation);
       selectedBible.openBible();
 
       // Declare & initialize the verse
       Verse requestedVerse;
-      requestedVerse = selectedBible.lookup(ref, result);
+      requestedVerse = selectedBible.lookup(ref, verseRetrievalResult);
 
-      if (result == SUCCESS) {
+      if (verseRetrievalResult == SUCCESS) {
          requestedVerse.display();
          cout << endl;
 
@@ -154,7 +157,7 @@ int main()
             }
 
             // Get the next verse
-            Verse nextVerse = selectedBible.nextVerse(result);
+            Verse nextVerse = selectedBible.nextVerse(verseRetrievalResult);
 
             // Determine if the book and chapter needs to be displayed or not
             if (nextVerse.getRef().getBook() > requestedVerse.getRef().getBook() ||
@@ -163,20 +166,21 @@ int main()
                nextVerse.display();
             } else {
                cout << "<br>" << endl;
-               nextVerse.displayNoBC();
+               nextVerse.displayNoBookOrChapter();
             }
 
             cout << endl;
 
-            /* Set verse to nextVerse
+            /* Set requestedVerse to nextVerse
                This is to help determine if
-               display or displayNoBC should be called */
+               display or displayNoBookOrChapter
+               should be called for the next verse*/
             requestedVerse = nextVerse;
          }
 
          cout << "</p>" << endl;
       } else {
-         cout << "<p>" << selectedBible.error(ref, result) << "</p>" << endl;
+         cout << "<p>" << selectedBible.error(ref, verseRetrievalResult) << "</p>" << endl;
       }
 
       selectedBible.closeBible();

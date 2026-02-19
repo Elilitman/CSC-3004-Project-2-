@@ -65,7 +65,7 @@ Ref::Ref() {
    verse = 0;
 
    // Initialize the books
-   InitializeBooks(books);
+   InitializeBooks(booksOfTheBible);
 }
 
 // Parse constructor - receives a line "34:5:7 text"
@@ -87,7 +87,7 @@ Ref::Ref(const string s) {
 
    // Initialize the books
    noBooks = false;
-   InitializeBooks(books);
+   InitializeBooks(booksOfTheBible);
 }
 
 // Construct Ref from three integers
@@ -98,7 +98,7 @@ Ref::Ref(const int b, const int c, const int v) {
 
    // Initialize the books
    noBooks = false;
-   InitializeBooks(books);
+   InitializeBooks(booksOfTheBible);
 }
 
 // Accessors
@@ -112,7 +112,7 @@ string Ref::getBookName() {
    if (noBooks || book > 66) {
       return to_string(book);
    } else {
-      return books[book - 1];
+      return booksOfTheBible[book - 1];
    }
 }
 
@@ -177,11 +177,11 @@ void Ref::display() {
    if (noBooks) {
       cout << book << ":" << chapter << endl << verse;
    } else {
-      cout << books[book - 1] << " " << chapter << "<br>" <<  verse << endl;
+      cout << booksOfTheBible[book - 1] << " " << chapter << "<br>" <<  verse << endl;
    }
 }
 
 // Display reference with no book or chapter numbers/names
-void Ref::displayNoBC() {
+void Ref::displayNoBookOrChapter() {
    cout << verse;
 }

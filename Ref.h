@@ -32,7 +32,7 @@ vector<string> InitializeBooks(vector<string>& books);
 class Ref {
    private:
       short book, chapter, verse;	// Reference information
-      vector<string> books;		// Books of the Bible
+      vector<string> booksOfTheBible;	// Books of the Bible
       bool noBooks;			// For error checking
 
 
@@ -61,7 +61,7 @@ class Ref {
       void display();
 
       // Display the referernce on cout without the book or chapter number/name.
-      void displayNoBC();
+      void displayNoBookOrChapter();
 };
 
 #endif //Ref_H

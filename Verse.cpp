@@ -46,7 +46,7 @@ void Verse::display() {
 }
 
 // Display verse number and verse text
-void Verse::displayNoBC() {
-   verseRef.displayNoBC();
+void Verse::displayNoBookOrChapter() {
+   verseRef.displayNoBookOrChapter();
    cout << " " << verseText;
 }
